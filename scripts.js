@@ -6,6 +6,9 @@ const toggle = player.querySelector(".toggle");
 const skipButtons = player.querySelectorAll(".data-skip");
 const ranges = player.querySelectorAll(".player_slider");
 const fullscreen = player.querySelector(".fullscreen");
+const grayscalefilter = player.querySelector(".grayscalefilter");
+const sepiafilter = player.querySelector(".sepiafilter");
+const invertfilter = player.querySelector(".invertfilter");
 
 function togglePlay() {
   if (video.paused) {
@@ -43,6 +46,30 @@ function toggleFullscreen() {
   video.requestFullscreen();
 }
 
+function toggleGrayscale() {
+  if (video.style.filter != "grayscale(100%)") {
+    video.style.filter = "grayscale(100%)";
+  } else {
+    video.style.filter = "none";
+  }
+}
+
+function toggleSepia() {
+  if (video.style.filter != "sepia(75%)") {
+    video.style.filter = "sepia(75%)";
+  } else {
+    video.style.filter = "none";
+  }
+}
+
+function toggleInvert() {
+  if (video.style.filter != "hue-rotate(180deg)") {
+    video.style.filter = "hue-rotate(180deg)";
+  } else {
+    video.style.filter = "none";
+  }
+}
+
 // Hook up event listeners
 video.addEventListener("click", togglePlay);
 video.addEventListener("play", updateButton);
@@ -61,3 +88,6 @@ progress.addEventListener("mousedown", () => (mousedown = true));
 progress.addEventListener("mouseup", () => (mousedown = false));
 
 fullscreen.addEventListener("click", toggleFullscreen);
+grayscalefilter.addEventListener("click", toggleGrayscale);
+sepiafilter.addEventListener("click", toggleSepia);
+invertfilter.addEventListener("click", toggleInvert);
