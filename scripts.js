@@ -42,7 +42,7 @@ function scrub(e) {
 }
 
 function toggleFullscreen() {
-  console.log("fullscreen time!");
+  // console.log("fullscreen time!");
   video.requestFullscreen();
 }
 
@@ -69,6 +69,51 @@ function toggleInvert() {
     video.style.filter = "none";
   }
 }
+
+// start voice recognition section
+
+window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+const recognition = new SpeechRecognition();
+recognition.interimResults = true;
+
+recognition.addEventListener("result", (e) => {
+  const transcript = Array.from(e.results)
+    .map((result) => result[0])
+    .map((result) => result.transcript)
+    .join("");
+  if (transcript.includes("play video") && e.results[0].isFinal && video.paused) {
+    togglePlay();
+  }
+  if (transcript.includes("pause video") && e.results[0].isFinal && !video.paused) {
+    togglePlay();
+  }
+  if (transcript.includes("skip forward") && e.results[0].isFinal) {
+    video.currentTime += parseFloat(10);
+  }
+  if (transcript.includes("skip backward") && e.results[0].isFinal) {
+    video.currentTime -= parseFloat(10);
+  }
+  // if (transcript.includes("full screen") && e.results[0].isFinal) {
+  //   video.requestFullscreen();
+  // }
+  if (transcript.includes("black and white") && e.results[0].isFinal) {
+    toggleGrayscale();
+  }
+  if (transcript.includes("sepia") && e.results[0].isFinal) {
+    toggleSepia();
+  }
+  if (transcript.includes("invert") && e.results[0].isFinal) {
+    toggleInvert();
+  }
+  if (transcript.includes("color") && e.results[0].isFinal) {
+    video.style.filter = "none";
+  }
+});
+
+recognition.addEventListener("end", recognition.start);
+
+recognition.start();
 
 // Hook up event listeners
 video.addEventListener("click", togglePlay);
